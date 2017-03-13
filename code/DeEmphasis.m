@@ -1,3 +1,4 @@
+% @author Yu Wang
 function [ y ] = DeEmphasis( x, alpha )
     if nargin<2
         alpha = 0.9375;

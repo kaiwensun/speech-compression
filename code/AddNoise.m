@@ -1,3 +1,4 @@
+% @author Yu Wang
 %decoder
 %Impulse train generation with unit amplitude to voiced frame, times power
 %computation of error signal in each frame
