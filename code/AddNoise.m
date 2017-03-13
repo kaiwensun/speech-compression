@@ -8,7 +8,7 @@ function [errorNoised]=AddNoise(voicingInd, unvoicingInd,errorFrames,power)
 errorNoised=zeros(size(errorFrames));
 %impulse train with unit amplitude generation to voiced frame
 vFrames=errorFrames(:,voicingInd);
-ImpulseTrain=ones(1,180).*power(:,voicingInd);
+ImpulseTrain=ones(numel(voicingInd),180).*power(:,voicingInd)';
 errorNoised(:,voicingInd)=vFrames+ImpulseTrain;
 
 %white noise to unvoiced frame
