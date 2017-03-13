@@ -17,10 +17,10 @@ function [ voicingFrames, voicingInd, zeroCrossCnt] = voicingDetector( frames, r
         voicingThresh = 21;
     end
     thresh = voicingThresh*(size(frames,1)/180)/(rate/8000);
-    sgn = frames<0;
+    sgn = frames>0;
     cross = xor(sgn(1:end-1,:),sgn(2:end,:));
     zeroCrossCnt = sum(cross);
-    voicingInd = zeroCrossCnt<thresh;
+    voicingInd = zeroCrossCnt>thresh;%should 
     voicingFrames = frames;
     voicingFrames(:,~voicingInd) = 0;
 end

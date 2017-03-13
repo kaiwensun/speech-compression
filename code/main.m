@@ -9,10 +9,9 @@ windowSize = 180;
 speechThresh = 0.01;
 voicingThresh = 21;
 
-%% load audio data
+%% load and preprocess audio data
 signal = getAudio(filename,rate);
-
-%% get segments (frames)
+signal = preEmphasis(signal);
 frames = getSegment(signal,windowSize);
 
 %% split frames into non-speech, voiced speech and unvoiced speech
@@ -24,9 +23,17 @@ unvoicingInd = xor(speechInd,voicingInd);
 unvoicingFrames = frames;
 unvoicingFrames(:,~unvoicingInd) = 0;
 
-%% temp test
-hold off
-plot(frames2signal(voicingFrames),'r')
-hold on
-plot(frames2signal(unvoicingFrames),'b')
+%% LP analysis
+[va,ve,vk,vR] = levinsonDurbin( voicingFrames(:,voicingInd), 10);
+[ua,ue,uk,uR] = levinsonDurbin( unvoicingFrames(:,unvoicingInd), 4);
 
+%% prediction error
+errorFrames = zeros(size(frames));
+errorFrames(:,voicingInd) = predictionErrorFilter(voicingFrames(:,voicingInd),va);
+errorFrames(:,unvoicingInd) = predictionErrorFilter(unvoicingFrames(:,unvoicingInd),ua);
+
+%% period
+periods = pitchPeriodEstimator(errorFrames,voicingInd, rate);
+
+%% power computation
+p = powerComputation(errorFrames,periods,unvoicingInd, voicingInd);
