@@ -22,6 +22,6 @@ function [ power ] = powerComputation(errorFrames, periods,unvoicingInd,voicingI
         end
     end
     vFrames = errorFrames(:,voicingInd);
-    power(:,unvoicingInd) = mean(vFrames.^2);
+    power(:,voicingInd) = mean(vFrames.^2);
 end
 
