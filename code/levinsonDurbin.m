@@ -1,4 +1,5 @@
 %% find Levinson-Durbin parameters for frames
+% @author Kaiwen Sun
 % @param frames: L-by-n matrix. L is frame size. n is number of frames.
 % @param order: the order of levinson
 % @return a: n-by-(order+1) matrix. a(:,1) is always ones. Approximatly 

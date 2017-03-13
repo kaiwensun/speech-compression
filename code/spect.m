@@ -1,3 +1,7 @@
+%% draw spectrum of signal
+% @author Kaiwen Sun
+% @param x: signal
+% @param Fs: freauency
 function spect(x,Fs)
     N = length(x);
     xdft = fft(x);

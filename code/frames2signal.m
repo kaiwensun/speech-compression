@@ -1,5 +1,5 @@
-%%
-% convert frames matrix to linear signal.
+%% Convert frames matrix to linear signal.
+% @author Kaiwen Sun
 % @param frames is a matrix, each column of which is a frame.
 % @return linearized column vector of signal.
 function [ signal ] = frames2signal( frames)

@@ -1,5 +1,5 @@
-%%
-% Segment if length of s is not a multiple of windowSize, padding 0 will be added
+%% Segment if length of s is not a multiple of windowSize, padding 0 will be added
+% @author Kaiwen Sun
 % @param s: signal. can be either column or row vector
 % @param windowSize: segment length.
 % @return frames: a matrix each column of which is a segment.
