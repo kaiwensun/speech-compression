@@ -2,11 +2,13 @@
 % @param frames: L-by-n matrix. L is frame size. n is number of frames.
 % @param order: the order of levinson
 % @return a: n-by-(order+1) matrix. a(:,1) is always ones. Approximatly 
-% a[0]*R[0] = a[1]*R[1]+a[2]*R[2]*...*a[p]*R[p].
+% a[0]*R[0] = a[1]*R[1]+a[2]*R[2]*...*a[p]*R[p]. The values of a are
+% negative of that returned by MATLAB levinson().
 % @return e: n-by-(order+1) matrix. e(:,order+1) is the final error.
 % e(:,j) is the error in the j-th recursion.
 % @return k: n-by-(order+1) matrix. PARCOR coeffieients. k(:,1) is always
-% zeros.
+% zeros. The values of k are negative of that returned by MATLAB
+% levinson().
 % @return R: (order+1)-by-n matrix. Auto-correlation.
 function [a,e,k,R] = levinsonDurbin( frames, order )
     sz = size(frames);
