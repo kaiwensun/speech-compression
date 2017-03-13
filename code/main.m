@@ -9,9 +9,8 @@ windowSize = 180;
 speechThresh = 0.01;
 voicingThresh = 21;
 
-%% load, preprocess audio data
+%% load audio data
 signal = getAudio(filename,rate);
-%signal = signal(30000:60000);
 
 %% get segments (frames)
 frames = getSegment(signal,windowSize);
@@ -29,5 +28,5 @@ unvoicingFrames(:,~unvoicingInd) = 0;
 hold off
 plot(frames2signal(voicingFrames),'r')
 hold on
-plot(frames2signal(unvoicingFrames))
+plot(frames2signal(unvoicingFrames),'b')
 
