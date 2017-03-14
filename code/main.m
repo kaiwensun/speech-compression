@@ -2,38 +2,32 @@
 % @author Kaiwen Sun
 
 %% meta configuration
-filename = 'hello.mp3';
+filename = 'sentence.wav';
+
+[a ,periods,power,voicingInd,unvoicingInd, windowSize ] = mainEncoder( filename );
+%% save variables
+save('pack.mat','a','periods','power','voicingInd','unvoicingInd');
+
+%% reconstruct
+reconstSig = mainDecoder(a(2:end,:),periods, power, voicingInd, unvoicingInd, windowSize);
 rate = 8000;
-windowSize = 180;
-%voicedThresh = 0.2;
-speechThresh = 0.01;
-voicingThresh = 21;
+soundsc(reconstSig,rate);
 
-%% load and preprocess audio data
-signal = getAudio(filename,rate);
-signal = preEmphasis(signal);
-frames = getSegment(signal,windowSize);
+%% save reconstructed sound
+reconstSig = reconstSig./max(reconstSig).*0.8;
+audiowrite('reconstructed.wav',reconstSig,rate);
 
-%% split frames into non-speech, voiced speech and unvoiced speech
-[speechFrames, speechInd] = speechDetector(frames,speechThresh);
-%[voicingFrames, voicingInd] = speechDetector(speechFrames,voicedThresh);%voicingDetector(speechFrames,rate);
-[voicingFrames, voicingInd, ~] = voicingDetector( frames, rate, voicingThresh );
-
-unvoicingInd = xor(speechInd,voicingInd);
-unvoicingFrames = frames;
-unvoicingFrames(:,~unvoicingInd) = 0;
-
-%% LP analysis
-[va,ve,vk,vR] = levinsonDurbin( voicingFrames(:,voicingInd), 10);
-[ua,ue,uk,uR] = levinsonDurbin( unvoicingFrames(:,unvoicingInd), 4);
-
-%% prediction error
-errorFrames = zeros(size(frames));
-errorFrames(:,voicingInd) = predictionErrorFilter(voicingFrames(:,voicingInd),va);
-errorFrames(:,unvoicingInd) = predictionErrorFilter(unvoicingFrames(:,unvoicingInd),ua);
-
-%% period
-periods = pitchPeriodEstimator(errorFrames,voicingInd, rate);
-
-%% power computation
-p = powerComputation(errorFrames,periods,unvoicingInd, voicingInd);
+% %% debug
+% close all
+% %plot voiced and unvoiced speech
+% figure(1)
+% plot(frames2signal(unvoicingFrames), 'b');
+% plot(frames2signal(voicingFrames),'r');
+% 
+% %compare original sound and reconstructed sound
+% hold off
+% plot(signal-1,'r')
+% hold on
+% plot(reconstSig./max(reconstSig))
+% plot(ind2signal(voicingInd,windowSize)*0.1-0.2,'g')
+% plot(ind2signal(unvoicingInd,windowSize)*0.1-0.4,'k')
