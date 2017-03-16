@@ -2,12 +2,14 @@
 % @author Kaiwen Sun
 
 %% meta configuration
-%filename = 'original sound/hello.mp3';
-filename = 'sentence.wav';
+filename = 'combined.wav';
 
 [a ,periods,power,voicingInd,unvoicingInd, windowSize ] = mainEncoder( filename );
 %% save variables
-save('pack.mat','a','periods','power','voicingInd','unvoicingInd');
+delete 'pack.mat';
+save('pack.mat','a','periods','power','voicingInd','unvoicingInd', 'windowSize');
+clear all
+load('pack.mat');
 
 %% reconstruct
 reconstSig = mainDecoder(a(2:end,:),periods, power, voicingInd, unvoicingInd, windowSize);
