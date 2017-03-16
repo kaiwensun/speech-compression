@@ -17,27 +17,27 @@ rate = 8000;
 windowSize = 180;
 speechThresh = 0.008;
 %voicedThresh = 0.001;   %decreasing thresh gives more voiced frames.
-voicingThresh = 55;%decreasing thresh gives more unvoiced frames.
+voicingThresh = 80;%decreasing thresh gives more unvoiced frames.
 
 %% load and preprocess audio data
 signal = getAudio(filename,rate);
 signal = preEmphasis(signal);
 frames = getSegment(signal,windowSize);
-signal = frames2signal(frames); %padding to signal.
+%signal = frames2signal(frames); %padding to signal.
 
 %% split frames into non-speech, voiced speech and unvoiced speech
 [speechFrames, speechInd] = speechDetector(frames,speechThresh);
 %[voicingFrames_energy, voicingInd_energy] = speechDetector(speechFrames,voicedThresh);%voicingDetector(speechFrames,rate);
-[voicingFrames, voicingInd, ~] = voicingDetector( speechFrames, speechInd, rate, voicingThresh );
+[~, voicingInd, ~] = voicingDetector( speechFrames, speechInd, rate, voicingThresh );
 %voicingInd = voicingInd & voicingInd_energy;
 %voicingFrames(:,voicingInd) = speechFrames(:,voicingInd);
 
 unvoicingInd = xor(speechInd,voicingInd);
-unvoicingFrames = frames;
-unvoicingFrames(:,~unvoicingInd) = 0;
+%unvoicingFrames = frames;
+%unvoicingFrames(:,~unvoicingInd) = 0;
 
 %% LP analysis
-[a,e,k,R] = levinsonDurbin(speechFrames, 10);
+[a,~,~,~] = levinsonDurbin(speechFrames, 10);
 
 %% prediction error
 errorFrames =predictionErrorFilter(speechFrames,a(2:end,:));

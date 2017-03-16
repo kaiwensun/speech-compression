@@ -2,6 +2,7 @@
 % @author Kaiwen Sun
 
 %% meta configuration
+%filename = 'original sound/hello.mp3';
 filename = 'sentence.wav';
 
 [a ,periods,power,voicingInd,unvoicingInd, windowSize ] = mainEncoder( filename );
